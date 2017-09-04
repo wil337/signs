@@ -234,7 +234,7 @@ model <- function(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
         cat ("Cost after epoch" , epoch,":", epoch_cost, "\n")
       if (print_cost == TRUE & epoch %% 5 == 0){
         if(epoch ==1) costs <- epoch_cost
-        else costs<-cbind(costs,epoch_cost)
+        else costs<-c(costs,epoch_cost)
       }
     }    
         
@@ -263,4 +263,4 @@ model <- function(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
   })#sess$close()
   return(parameters)  
 }
-parameters <- model(X_train, Y_train, X_test, Y_test,learning_rate = 0.0001, num_epochs = 1500L)
+parameters <- model(X_train, Y_train, X_test, Y_test,learning_rate = 0.0001, num_epochs = 2L)
