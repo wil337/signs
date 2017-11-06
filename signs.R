@@ -6,7 +6,7 @@ classes <- load_dataset()$classes
 
 # Example of a picture
 library(imager)
-index = 4
+index = 1
 newimg <- aperm(train_dataset["train_set_x"][index,,,],c(2,3,1,4)) #convert dimensions into usable for imager
 plot(cimg(newimg))
 dim(X_train_orig)
@@ -212,7 +212,7 @@ model <- function(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
       epoch_cost <- 0                       # Defines a cost related to an epoch
       num_minibatches <- floor(m / minibatch_size) # number of minibatches of size minibatch_size in the train set
       seed <- seed + 1L
-      minibatches <- random_mini_batches(X_train, Y_train, mini_batch_size, seed)
+      minibatches <- random_mini_batches(X_train, Y_train, minibatch_size, seed)
       
       for (i in 1:length(minibatches$mini_batch_X)){
         # Select a minibatch
@@ -263,4 +263,5 @@ model <- function(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
   })#sess$close()
   return(parameters)  
 }
-parameters <- model(X_train, Y_train, X_test, Y_test,learning_rate = 0.0001, num_epochs = 2L)
+parameters <- model(X_train, Y_train, X_test, Y_test,learning_rate = 0.0001, num_epochs = 1500L,
+                    minibatch_size = 64L)

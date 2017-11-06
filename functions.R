@@ -148,19 +148,42 @@ ones <-function(shape){
 }
 ones(3)
 
+#test import
+h5py<-import("h5py")
+np<-import("numpy")
+test_dataset_py = h5py$File('test_signs.h5', "r")
+test_set_x_orig_py = np$array(test_dataset["test_set_x"][]) # your test set features
+test_set_y_orig_py = np$array(test_dataset["test_set_y"][]) # your test set labels
+
+head(test_set_x_orig,500)-head(test_set_x_orig_py,500)
+test_set_x_orig-test_set_x_orig_py
+
 load_dataset <- function(){
-  train_dataset <- h5file('train_signs.h5', "r")
-  train_set_x_orig <- array(train_dataset["train_set_x"][],c(1080,64,64,3)) # your train set features
-  train_set_y_orig = array(train_dataset["train_set_y"][]) # your train set labels
-  
+  #h5py<-import("h5py")
+  np<-import("numpy", convert=TRUE)
+  #test_dataset = h5py$File('test_signs.h5', "r")
   test_dataset <- h5file('test_signs.h5', "r")
-  test_set_x_orig = array(test_dataset["test_set_x"][],c(120,64,64,3)) # your test set features
-  test_set_y_orig = array(test_dataset["test_set_y"][]) # your test set labels
+  test_set_x_orig = np$array(test_dataset["test_set_x"][]) # your test set features
+  test_set_y_orig = np$array(test_dataset["test_set_y"][]) # your test set labels
   
-  classes = array(test_dataset["list_classes"][]) # the list of classes
+  #train_dataset = h5py$File('train_signs.h5', "r")
+  train_dataset <- h5file('train_signs.h5', "r")
+  train_set_x_orig = np$array(train_dataset["train_set_x"][]) # your train set features
+  train_set_y_orig = np$array(train_dataset["train_set_y"][]) # your train set labels
   
-  train_set_y_orig = matrix(train_set_y_orig,ncol=1)
-  test_set_y_orig = matrix(test_set_y_orig,ncol=1)
+  #train_dataset <- h5file('train_signs.h5', "r")
+  #train_set_x_orig <- array(train_dataset["train_set_x"][],c(1080,64,64,3)) # your train set features
+  #train_set_y_orig = array(train_dataset["train_set_y"][]) # your train set labels
+  
+  #test_dataset <- h5file('test_signs.h5', "r")
+  #test_set_x_orig = array(test_dataset["test_set_x"][],c(120,64,64,3)) # your test set features
+  #test_set_y_orig = array(test_dataset["test_set_y"][]) # your test set labels
+  
+  #classes = array(test_dataset["list_classes"][]) # the list of classes
+  classes = np$array(test_dataset["list_classes"][]) # the list of classes
+  
+  #train_set_y_orig = matrix(train_set_y_orig,ncol=1)
+  #test_set_y_orig = matrix(test_set_y_orig,ncol=1)
   
   return(list(train_set_x_orig=train_set_x_orig, train_set_y_orig=train_set_y_orig, test_set_x_orig=test_set_x_orig, test_set_y_orig=test_set_y_orig, classes=classes))
   
