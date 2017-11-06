@@ -1,3 +1,5 @@
+library(reticulate)
+library(tensorflow)
 linear_function<-function(){
     np <- import("numpy")
   

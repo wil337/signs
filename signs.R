@@ -1,8 +1,11 @@
+library(h5)
 X_train_orig <- load_dataset()$train_set_x_orig
 Y_train_orig <- load_dataset()$train_set_y_orig
 X_test_orig <- load_dataset()$test_set_x_orig
 Y_test_orig <- load_dataset()$test_set_y_orig
 classes <- load_dataset()$classes
+train_dataset <- h5file('train_signs.h5', "r")
+
 
 # Example of a picture
 library(imager)
