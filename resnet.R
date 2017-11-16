@@ -182,6 +182,8 @@ resnet50 <- function(input_shape = c(64L, 64L, 3L), classes = 6L){
 #check <- keras_model_sequential()
 
 model <- resnet50(input_shape = c(64L, 64L, 3L), classes = 6L)
+model <- load_model_hdf5("~/signs/ResNet50.h5")
+
 summary(model)
 model %>% compile(
   loss = 'categorical_crossentropy',
@@ -189,23 +191,40 @@ model %>% compile(
   metrics = c('accuracy')
 )
 
+load_dataset <- function(){
+  np<-import("numpy", convert=TRUE)
+  test_dataset <- h5file("~/signs/test_signs.h5", "r")
+  test_set_x_orig = np$array(test_dataset["test_set_x"][]) # your test set features
+  test_set_y_orig = np$array(test_dataset["test_set_y"][]) # your test set labels
+  
+  train_dataset <- h5file('~/signs/train_signs.h5', "r")
+  train_set_x_orig = np$array(train_dataset["train_set_x"][]) # your train set features
+  train_set_y_orig = np$array(train_dataset["train_set_y"][]) # your train set labels
+  
+  classes = np$array(test_dataset["list_classes"][]) # the list of classes
+  
+  return(list(train_set_x_orig=train_set_x_orig, 
+              train_set_y_orig=train_set_y_orig, 
+              test_set_x_orig=test_set_x_orig, 
+              test_set_y_orig=test_set_y_orig, 
+              classes=classes))
+  
+}
 X_train_orig <- load_dataset()$train_set_x_orig
 Y_train_orig <- load_dataset()$train_set_y_orig
 X_test_orig <- load_dataset()$test_set_x_orig
 Y_test_orig <- load_dataset()$test_set_y_orig
 classes <- load_dataset()$classes
-train_dataset <- h5file('train_signs.h5', "r")
+
+y_train <- to_categorical(Y_train_orig, 6)
+y_test <- to_categorical(Y_test_orig, 6)
 
 x_train <- X_train_orig / 255
-y_train <- Y_train_orig / 255
-
-x_train <- array_reshape(x_train, c(nrow(x_train), 784))
-x_test <- array_reshape(x_test, c(nrow(x_test), 784))
+x_test <- X_test_orig / 255
 
 history <- model %>% fit(
   x_train, y_train, 
-  epochs = 30L, batch_size = 128L, 
-  validation_split = 0.2
+  epochs = 20L, batch_size = 32L
 )
 
 plot(history)
@@ -213,13 +232,3 @@ plot(history)
 model %>% evaluate(x_test, y_test)
 model %>% predict_classes(x_test)
 
-
-library(h5)
-h5file('test_signs.h5', 'r') #in linux, need to run without the 'r' first
-h5file('train_signs.h5', 'r')
-model <-h5file('ResNet50.h5', 'r') 
-  
-  load_model_hdf5('ResNet50.h5')
-summary(model)
-
-model <- load_model_hdf5("~/signs/ResNet50.h5")
